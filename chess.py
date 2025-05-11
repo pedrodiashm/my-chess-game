@@ -1,5 +1,4 @@
 from pieces import *
-import re
 
 
 
@@ -50,21 +49,27 @@ class Board():
             
     def show(self):
         self.update_board()
+        c=1
         for row in self.board:
+            print(c, end='.|')
             for column in row:
                 if column:
-                    print(str(column), end=' ')
+                    print(f'{str(column)} |', end="")
                 else: 
-                    print(' ', end=' ') 
+                    print('  |', end='') 
+            
+            c+=1
             print()
+            print("---------------------------")
+
+        print("  |A |B |C |D |E |F |G |H |")
 
     def show_possibles(self, position):
         return self.board[position[0]][position[1]].possible_moves(self.pieces)
 
     # def parser(self,lance):
     #     if lance == "O-O" or lance == "O-O-O":
-    #         print("Roque detectado, ainda não implementado.")
-    #         return
+    #         return ?
 
     #     match = re.match(r'^([RQBNK])?([a-h1-8]?)([a-h1-8]))$', lance)
     #     tipo, origem, destino = match.group() 
@@ -90,4 +95,4 @@ tab = Board()
 
 tab.init_board()
 tab.show()
-print(tab.show_possibles((0,6)))
+print(tab.show_possibles((0,2)))

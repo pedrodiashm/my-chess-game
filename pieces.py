@@ -105,11 +105,32 @@ class Bishop(Piece):
     def possible_moves(self, pieces):
         directions = [(-1,-1),(-1,1),(1,-1),(1,1)]
         row, column = self.position
+        movements = []
 
         #to do
         for dr, dc in directions:
-            for i in range(8):
-                pass
+            for i in range(1, 8):
+                new_pos = (row + dr*i, column + dc*i)
+                if 0 < new_pos[0] <= 7 and 0 < new_pos[1] <= 7:
+                    blocked = False
+
+                    for piece in pieces:
+                        if piece.position == new_pos:
+                            if piece.color != self.color:
+                                movements.append(new_pos)
+                                blocked = True
+                            elif piece.color == self.color:
+                                blocked = True
+                            break
+                        
+
+                    if blocked:
+                        break
+                    movements.append(new_pos)
+        
+
+        return movements
+                        
 #to do
 class Rook(Piece):
     def __init__(self, color, position):
