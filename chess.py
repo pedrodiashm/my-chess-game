@@ -1,7 +1,5 @@
 from pieces import *
 
-
-
 class Board():
     def __init__(self):
         self.rows_cords = {
@@ -52,9 +50,9 @@ class Board():
         c=1
         for row in self.board:
             print(c, end='.|')
-            for column in row:
-                if column:
-                    print(f'{str(column)} |', end="")
+            for square in row:
+                if square:
+                    print(f'{str(square)} |', end="")
                 else: 
                     print('  |', end='') 
             
@@ -80,8 +78,7 @@ class Board():
     #to do 
     def valid_moves(self):
         pass
-    def move(self, piece, coord):    
-        #to do: create a parser to move the pieces
+    def move(self, piece_Coord, coord):
         pass
 
 
@@ -95,4 +92,4 @@ tab = Board()
 
 tab.init_board()
 tab.show()
-print(tab.show_possibles((0,2)))
+print(tab.show_possibles((0,0)))
