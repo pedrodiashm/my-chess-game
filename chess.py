@@ -23,7 +23,7 @@ class Board():
 
     def init_board(self):
             for i in range(8):
-                self.pieces.append(Pawn('white', (1, i)))
+                #self.pieces.append(Pawn('white', (1, i)))
                 self.pieces.append(Pawn('black', (6, i)))
             self.pieces.append(Queen('white',(0,3)))
             self.pieces.append(King('white',(0,4)))
@@ -62,34 +62,178 @@ class Board():
 
         print("  |A |B |C |D |E |F |G |H |")
 
-    def show_possibles(self, position):
-        return self.board[position[0]][position[1]].possible_moves(self.pieces)
+    def isValid(self, piecePos, move):
+        
+        piece = None
+        if self.board[piecePos[0]][piecePos[1]]:
+            piece = self.board[piecePos[0]][piecePos[1]]
+        if piece:
+            if piece.name == "N":
+                directions = [
+                    (-2, 1), (-2, -1),
+                    (-1, -2), (-1, 2),
+                    (1, -2), (1, 2),
+                    (2, -1), (2, 1)
+                    ]
+                movements = []
+                row, column = piece.position
+                for i in directions:
+                    new_pos = (row + i[0], column + i[1])
+                    if 0 <= new_pos[0] < 8 and 0<= new_pos[1] < 8:
+                        movements.append(new_pos)
 
-    # def parser(self,lance):
-    #     if lance == "O-O" or lance == "O-O-O":
-    #         return ?
+                for i in self.pieces:
+                    if i.position in movements:
+                        if i.color == piece.color:
+                            movements.remove(i.position)
 
-    #     match = re.match(r'^([RQBNK])?([a-h1-8]?)([a-h1-8]))$', lance)
-    #     tipo, origem, destino = match.group() 
-    #     tipo = tipo or 'p'
+                if move not in movements:
+                    return False
+                return True
 
-# muito dificil para fazer agora
+            if piece.name == "Q":
+                directions = [(-1,-1),(-1,1),(1,-1),(1,1),(-1, 0), (1,0), (0,1), (0,-1)]
+                row, column = piece.position
+                movements = []
 
-    #to do 
-    def valid_moves(self):
-        pass
-    def move(self, piece_Coord, coord):
-        pass
+                for dr, dc in directions:
+                    for i in range(1, 8):
+                        new_pos = (row + dr*i, column + dc*i)
+                        if 0 <= new_pos[0] <= 7 and 0 <= new_pos[1] <= 7:
+                            blocked = False
+
+                            for i in self.pieces:
+                                if i.position == new_pos:
+                                    if piece.color != i.color:
+                                        movements.append(new_pos)
+                                        blocked = True
+                                    elif piece.color == i.color:
+                                        blocked = True
+                                    break
+                                
+
+                            if blocked:
+                                break
+                            movements.append(new_pos)
+                if move not in movements:
+                    return False
+                return True
+
+            if piece.name == "K":
+                movements = []
+                row, column = piece.position
+                for i in range(-1, 2):
+                    for j in range(-1,2):
+                        new_pos = (row + i, column + j)
+
+                        if new_pos == (row, column):
+                            pass
+                        
+                        if 0<= new_pos[0] < 8 and 0<= new_pos[1] < 8:
+                            movements.append(new_pos)
+                for i in pieces:
+                    if i.position in movements:
+                        if i.color == piece.color:
+                            movements.remove(i.position)
+                if move not in movements:
+                    return False
+                return True
 
 
 
+            if piece.name == "B":
+                directions = [(-1,-1),(-1,1),(1,-1),(1,1)]
+                row, column = piece.position
+                movements = []
 
-                     
+                #to do
+                for dr, dc in directions:
+                    for i in range(1, 8):
+                        new_pos = (row + dr*i, column + dc*i)
+                        if 0 <= new_pos[0] <= 7 and 0 <= new_pos[1] <= 7:
+                            blocked = False
 
+                            for i in self.pieces:
+                                if i.position == new_pos:
+                                    if i.color != piece.color:
+                                        movements.append(new_pos)
+                                        blocked = True
+                                    elif i.color == piece.color:
+                                        blocked = True
+                                    break
+                                
+
+                            if blocked:
+                                break
+                            movements.append(new_pos)
+                if move not in movements:
+                    return False
+                return True
+                
+            if piece.name == "R":
+                directions = [(1,0),(-1,0),(0,1),(0,-1)]
+                row, column = piece.position
+                movements = []
+
+                #to do
+                for dr, dc in directions:
+                    for i in range(1, 8):
+                        new_pos = (row + dr*i, column + dc*i)
+                        if 0 <= new_pos[0] <= 7 and 0 <= new_pos[1] <= 7:
+                            blocked = False
+
+                            for i in self.pieces:
+                                if i.position == new_pos:
+                                    if piece.color != piece.color:
+                                        movements.append(new_pos)
+                                        blocked = True
+                                    elif i.color == piece.color:
+                                        blocked = True
+                                    break
+                                
+
+                            if blocked:
+                                break
+                            movements.append(new_pos)
+                if move not in movements:
+                    return False
+                return True
+                
+            if piece.name == "p":
+                direction = 1 if piece.color == 'white' else -1
+                row, column = piece.position
+                movements = []
+
+                new_row = row + direction
+                if 0 <= new_row < 8:
+                    movements.append((new_row, column))
+                
+                if (piece.first_move):
+                    new_row = row + 2 * direction
+                    movements.append((new_row, column)) 
+                for piece in self.pieces:
+                    if piece.position == (new_row, column):
+                        movements.remove(piece.position)
+
+                #captura
+                capture = [-1,1]
+
+                for dc in capture:
+                    capture_pos = (row+direction, column + dc)
+                    if 0 <= capture_pos[0] < 8 and 0 <= capture_pos[1] < 8: 
+                        for piece in self.pieces:
+                            if piece.position == capture_pos and piece.color != piece.color:
+                                movements.append(capture_pos)
+                if move not in movements:
+                    return False
+                return True
+        return False
 
 
 tab = Board()
 
 tab.init_board()
 tab.show()
-print(tab.show_possibles((0,0)))
+print(tab.isValid((0,3), (1,3)))
+
+

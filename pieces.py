@@ -251,5 +251,3 @@ class King(Piece):
                 if i.color == self.color:
                     movements.remove(i.position)
         return movements
-
-        return movements
